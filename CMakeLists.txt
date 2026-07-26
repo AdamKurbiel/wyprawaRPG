@@ -12,7 +12,10 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(wyprawaRPG src/main.cpp)
+add_executable(wyprawaRPG
+    src/main.cpp
+)
+
 target_compile_features(wyprawaRPG PRIVATE cxx_std_17)
 target_link_libraries(wyprawaRPG PRIVATE SFML::Graphics)
 
