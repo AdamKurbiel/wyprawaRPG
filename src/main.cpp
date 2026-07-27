@@ -124,6 +124,15 @@ int main()
 		return 0;
 	}
 
+	sf::Texture charactertexture;
+
+	if (!charactertexture.loadFromFile("../assets/textures/cieniowanie.png")){
+		return 0;
+	}
+
+
+
+
 	const int MAP_SIZE = 12;
 
 	UiKeyboard virtualKeyboard;
@@ -195,9 +204,16 @@ int main()
 		bounds.position.x + bounds.size.x / 2,
 		bounds.position.y + bounds.size.y / 2
 	});
-	inputContent.setPosition({TILE_SIZE*8.5,TILE_SIZE*3});
+	inputContent.setPosition({TILE_SIZE*8.5,TILE_SIZE*2});
 	mainWindow.draw(inputContent);
 
+
+
+	sf::Sprite sprite(charactertexture);
+	sprite.setPosition({335.f,150.f});
+	sprite.setScale({0.75f,0.75f});
+	mainWindow.draw(sprite);
+	
 	/*
 	sf::Text debugText(GENERAL_FONT);	
 	debugText.setString("x:"+std::to_string(virtualKeyboard.cursor_rx) + "\ny:" + std::to_string(virtualKeyboard.cursor_ry) + "\ncurrently hovering on: "+ virtualKeyboard.currentlyHovering + "\nContent:"+ virtualKeyboard.content);
