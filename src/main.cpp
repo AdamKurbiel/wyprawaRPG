@@ -2,10 +2,8 @@
 #include <iostream>
 #include <string>
 
+#include "Utils.hpp"
 
-float lerp(float start,float end, float t){
-	return start * (1 - t) + end * t;
-}
 
 
 int main()
@@ -85,6 +83,7 @@ int main()
 	sf::RectangleShape player({TILE_SIZE, TILE_SIZE*2});
 	player.setFillColor(sf::Color::Blue);
 
+	
 	plr_rx = lerp(plr_rx, plr_x, 0.05f);
 	plr_ry = lerp(plr_ry, plr_y, 0.05f);
 	player.setPosition({plr_rx,plr_ry});
