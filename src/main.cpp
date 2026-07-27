@@ -2,6 +2,12 @@
 #include <iostream>
 #include <string>
 
+
+float lerp(float start,float end, float t){
+	return start * (1 - t) + end * t;
+}
+
+
 int main()
 {
 	sf::Font font;
@@ -18,6 +24,9 @@ int main()
 
 	float plr_x = TILE_SIZE * 1;
 	float plr_y = TILE_SIZE * 2;
+
+	float plr_rx = plr_x;
+	float plr_ry = plr_y;
 
 
 	sf::RenderWindow window( sf::VideoMode( { 640, 512 } ), "wyprawaRPG" );
@@ -75,7 +84,10 @@ int main()
 
 	sf::RectangleShape player({TILE_SIZE, TILE_SIZE*2});
 	player.setFillColor(sf::Color::Blue);
-	player.setPosition({plr_x,plr_y});
+
+	plr_rx = lerp(plr_rx, plr_x, 0.05f);
+	plr_ry = lerp(plr_ry, plr_y, 0.05f);
+	player.setPosition({plr_rx,plr_ry});
 	window.draw(player);
 
 	sf::Text debugText(font);	
