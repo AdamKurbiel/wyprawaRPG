@@ -4,65 +4,127 @@
 
 #include "Utils.hpp"
 
+const float TILE_SIZE = 48.f;
+
+class UiKeyboard {
+	public:
+		float cursor_x;
+		float cursor_y;
+		
+		void checkKeyboardInput(sf::Keyboard::Key keyCode){
+			if (keyCode == sf::Keyboard::Key::Left) cursor_x -= 1; 
+			if (keyCode == sf::Keyboard::Key::Right) cursor_x += 1; 
+			if (keyCode == sf::Keyboard::Key::Up) cursor_y -= 1; 
+			if (keyCode == sf::Keyboard::Key::Down) cursor_y += 1;
+
+			if (cursor_x > 3) cursor_x = 1;
+			if (cursor_x < 1) cursor_x = 3;
+			if (cursor_y > 9) cursor_y = 1;
+			if (cursor_y < 1) cursor_y = 9;
+		}
+
+		void resetCursorPosition(){
+			cursor_x = 1;
+			cursor_y = 1;
+		};
+
+		void render(sf::RenderWindow &window, sf::Font font){
+			std::string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			
+			const int COLUMNS = 3;
+
+			float column = 1;
+			float row = 1;
+			for (int i = 1; i <= letters.length(); i++){
+				char key = letters[i-1];
+				sf::Text letter(font);
+				letter.setString(key);
+				letter.setFillColor(sf::Color::White);
+
+
+				sf::FloatRect bounds = letter.getLocalBounds();
+				letter.setOrigin({
+					bounds.position.x + bounds.size.x / 2,
+					bounds.position.y + bounds.size.y / 2
+				});
+
+				letter.setPosition({
+					TILE_SIZE * row + TILE_SIZE / 2,
+					TILE_SIZE * column + TILE_SIZE / 2
+				});
+				letter.setScale({0.9f,1.f});
+
+				window.draw(letter);
+
+				row++;
+				if (i % COLUMNS == 0){
+					row = 1;	
+					column++;
+				}
+				
+			}
+
+			sf::Text letter(font, "OK");
+			letter.setFillColor(sf::Color::White);
+			sf::FloatRect bounds = letter.getLocalBounds();
+			letter.setOrigin({
+					bounds.position.x + bounds.size.x / 2,
+					bounds.position.y + bounds.size.y / 2
+			});
+
+			letter.setPosition({
+				TILE_SIZE * row + TILE_SIZE / 2,
+				TILE_SIZE * column + TILE_SIZE / 2
+			});
+			letter.setScale({0.8f,1.f});
+			window.draw(letter);
+		}
+};
+
 
 
 int main()
 {
-	sf::Font font;
-	if (!font.openFromFile("../assets/fonts/arial.ttf"))
+	sf::Font GENERAL_FONT;
+	if (!GENERAL_FONT.openFromFile("../assets/fonts/arial.ttf"))
 	{
 		std::cout << "Couldn't find font: arial.ttf";
 		return 0;
 	}
 
-	const float TILE_SIZE = 48.f;
-	float TILE_PADDING = 0.f;
-	int MAP_SIZE = 12;
+	const int MAP_SIZE = 12;
+
+	UiKeyboard virtualKeyboard;
+	virtualKeyboard.resetCursorPosition();
 
 
-	float plr_x = TILE_SIZE * 1;
-	float plr_y = TILE_SIZE * 2;
+	sf::RenderWindow mainWindow( sf::VideoMode( { 640, 512 } ), "wyprawaRPG", sf::Style::Titlebar | sf::Style::Close);
 
-	float plr_rx = plr_x;
-	float plr_ry = plr_y;
-
-
-	sf::RenderWindow window( sf::VideoMode( { 640, 512 } ), "wyprawaRPG" );
-
-	while ( window.isOpen() )
+	while ( mainWindow.isOpen() )
 	{
-		while (const auto event = window.pollEvent())
+		while (const auto event = mainWindow.pollEvent())
 		{
     		if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
     		{
-        		if (keyPressed->code == sf::Keyboard::Key::Left)
-        		{
-					plr_x -= TILE_SIZE;
-       			}
-        		if (keyPressed->code == sf::Keyboard::Key::Right)
-        		{
-					plr_x += TILE_SIZE;
-       			}
-        		if (keyPressed->code == sf::Keyboard::Key::Up)
-        		{
-					plr_y -= TILE_SIZE;
-       			}
-        		if (keyPressed->code == sf::Keyboard::Key::Down)
-        		{
-					plr_y += TILE_SIZE;
-       			}
+				sf::Keyboard::Key KeyCode = keyPressed->code; //KEY
+
+
+				virtualKeyboard.checkKeyboardInput(KeyCode);
+
 
         		if (keyPressed->code == sf::Keyboard::Key::Escape)
         		{
-            		window.close();
+            		mainWindow.close();
         		}
     		}
 
-			if ( event->is<sf::Event::Closed>() ) window.close();
+			if ( event->is<sf::Event::Closed>() ) mainWindow.close();
 		}
 
-	window.clear();
+		mainWindow.clear();
+		
 
+	/*
 	for (int y = 0; y < MAP_SIZE; y++)
 	{
     	for (int x = 0; x < MAP_SIZE; x++)
@@ -72,38 +134,34 @@ int main()
 			if ((x + y) % 2) tile.setFillColor(sf::Color::Red);
 
         	tile.setPosition({
-            	x * TILE_SIZE + (TILE_SIZE * TILE_PADDING * x),
-            	y * TILE_SIZE + (TILE_SIZE * TILE_PADDING * y)
+            	x * TILE_SIZE,
+            	y * TILE_SIZE
         	});
 
         	window.draw(tile);
     	}
 	}
+	*/
 
-	sf::RectangleShape player({TILE_SIZE, TILE_SIZE*2});
-	player.setFillColor(sf::Color::Blue);
+	sf::RectangleShape keyboardCursor({TILE_SIZE, TILE_SIZE});
+	keyboardCursor.setFillColor(sf::Color::Transparent);
+	keyboardCursor.setOutlineColor(sf::Color::Blue);
+	keyboardCursor.setOutlineThickness(2.f);
+
+	keyboardCursor.setPosition({virtualKeyboard.cursor_x * TILE_SIZE ,virtualKeyboard.cursor_y * TILE_SIZE});
+	mainWindow.draw(keyboardCursor);
+
+	virtualKeyboard.render(mainWindow, GENERAL_FONT);
+
+	sf::Text debugText(GENERAL_FONT);	
+	debugText.setString("x:"+std::to_string(int(virtualKeyboard.cursor_x)) + "\ny:" + std::to_string(int(virtualKeyboard.cursor_y)));
+	debugText.setCharacterSize(14);
+	debugText.setFillColor(sf::Color::White);
+	debugText.setStyle(sf::Text::Bold);
+	mainWindow.draw(debugText);
 
 	
-	plr_rx = lerp(plr_rx, plr_x, 0.05f);
-	plr_ry = lerp(plr_ry, plr_y, 0.05f);
-	player.setPosition({plr_rx,plr_ry});
-	window.draw(player);
 
-	sf::Text debugText(font);	
-	debugText.setString("x:"+std::to_string(plr_x/TILE_SIZE) + "\ny:" + std::to_string(plr_y/TILE_SIZE));
-	debugText.setCharacterSize(14);
-	debugText.setFillColor(sf::Color::Black);
-	debugText.setStyle(sf::Text::Bold);
-	window.draw(debugText);
-
-	sf::Text debugTextShadow(font);	
-	debugTextShadow.setPosition({1,1});
-	debugTextShadow.setString("x:"+std::to_string(plr_x/TILE_SIZE) + "\ny:" + std::to_string(plr_y/TILE_SIZE));
-	debugTextShadow.setCharacterSize(14);
-	debugTextShadow.setFillColor(sf::Color::White);
-	debugTextShadow.setStyle(sf::Text::Bold);
-	window.draw(debugTextShadow);
-
-	window.display();
+	mainWindow.display();
 	}
 };
