@@ -7,6 +7,7 @@
 const float TILE_SIZE = 48.f;
 
 class UiKeyboard {
+	//todo// more readability
 	public:
 		const std::string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		const int COLUMNS = 3;
@@ -16,9 +17,16 @@ class UiKeyboard {
 		float cursor_y;
 
 		std::string currentlyHovering = "";
+		std::string input_question = "";
 		
 		float cursor_rx = cursor_x; //r means render (to lerp)
 		float cursor_ry = cursor_y;
+
+		UiKeyboard(std::string question){
+			input_question = question;
+			resetCursorPosition();
+			checkCursor();
+		}
 
 		void checkCursor(){
 			int index = static_cast<int>((cursor_y - 1) * COLUMNS + (cursor_x - 1));
@@ -62,54 +70,97 @@ class UiKeyboard {
 			cursor_ry = 1;
 		};
 
-		void render(sf::RenderWindow &window, sf::Font font){
+		void render(sf::RenderWindow& window, const sf::Font& font, float time)
+		{
+			cursor_rx = lerp(cursor_rx, cursor_x, 0.5f);
+			cursor_ry = lerp(cursor_ry, cursor_y, 0.5f);
+	
+			sf::RectangleShape keyboardCursor({TILE_SIZE, TILE_SIZE});
+			keyboardCursor.setFillColor(sf::Color::Transparent);
+			keyboardCursor.setOutlineColor(sf::Color::Blue);
+			keyboardCursor.setOutlineThickness(3.f);
+			keyboardCursor.setPosition({
+			    cursor_rx * TILE_SIZE,
+			    cursor_ry * TILE_SIZE
+			});
 			
-
 			float column = 1;
 			float row = 1;
-			for (int i = 1; i <= LETTERS.length(); i++){
-				char key = LETTERS[i-1];
-				sf::Text letter(font);
-				letter.setString(key);
-				letter.setFillColor(sf::Color::White);
-
-
-				sf::FloatRect bounds = letter.getLocalBounds();
-				letter.setOrigin({
-					bounds.position.x + bounds.size.x / 2,
-					bounds.position.y + bounds.size.y / 2
-				});
-
-				letter.setPosition({
-					TILE_SIZE * row + TILE_SIZE / 2,
-					TILE_SIZE * column + TILE_SIZE / 2
-				});
-				letter.setScale({0.9f,1.f});
-
-				window.draw(letter);
-
-				row++;
-				if (i % COLUMNS == 0){
-					row = 1;	
-					column++;
-				}
+			for (int i = 0; i < LETTERS.size(); i++)
+			{
+			    sf::Text letter(font);
+			    letter.setString(std::string(1, LETTERS[i]));
+			    letter.setFillColor(sf::Color::White);
 				
+			    sf::FloatRect letterBounds = letter.getLocalBounds();
+			    letter.setOrigin({
+			        letterBounds.position.x + letterBounds.size.x / 2.f,
+			        letterBounds.position.y + letterBounds.size.y / 2.f
+			    });
+				
+			    letter.setPosition({
+			        TILE_SIZE * row + TILE_SIZE / 2.f,
+			        TILE_SIZE * column + TILE_SIZE / 2.f
+			    });
+				
+			    letter.setScale({0.9f, 1.f});
+				
+			    window.draw(letter);
+				
+			    row++;
+			    if ((i + 1) % COLUMNS == 0)
+			    {
+			        row = 1;
+			        column++;
+			    }
 			}
-
-			sf::Text letter(font, "OK");
-			letter.setFillColor(sf::Color::White);
-			sf::FloatRect bounds = letter.getLocalBounds();
-			letter.setOrigin({
-					bounds.position.x + bounds.size.x / 2,
-					bounds.position.y + bounds.size.y / 2
+			
+			sf::Text ok(font);
+			ok.setString("OK");
+			ok.setFillColor(sf::Color::White);
+			sf::FloatRect okBounds = ok.getLocalBounds();
+			ok.setOrigin({
+			    okBounds.position.x + okBounds.size.x / 2.f,
+			    okBounds.position.y + okBounds.size.y / 2.f
 			});
-
-			letter.setPosition({
-				TILE_SIZE * row + TILE_SIZE / 2,
-				TILE_SIZE * column + TILE_SIZE / 2
+			ok.setPosition({
+			    TILE_SIZE * row + TILE_SIZE / 2.f,
+			    TILE_SIZE * column + TILE_SIZE / 2.f
 			});
-			letter.setScale({0.8f,1.f});
-			window.draw(letter);
+			ok.setScale({0.8f, 1.f});
+			window.draw(ok);
+			
+			sf::Text infoText(font);
+			infoText.setString(input_question);
+			infoText.setCharacterSize(24);
+			sf::FloatRect infoBounds = infoText.getLocalBounds();
+			infoText.setOrigin({
+				infoBounds.position.x + infoBounds.size.x / 2.f,
+				infoBounds.position.y + infoBounds.size.y / 2.f
+			});
+			infoText.setPosition({320.f, 20.f});
+			window.draw(infoText);
+
+
+			float baseY = 160.f;
+			float amplitude = 5.f;
+			float speed = 2.f;
+			
+			sf::Text inputContent(font);
+			inputContent.setString(content);
+			inputContent.setCharacterSize(40);
+			sf::FloatRect inputBounds = inputContent.getLocalBounds();
+			inputContent.setOrigin({
+			    inputBounds.position.x + inputBounds.size.x / 2.f,
+			    inputBounds.position.y + inputBounds.size.y / 2.f
+			});
+			inputContent.setPosition({
+			    TILE_SIZE * 8.5f,
+			    baseY + std::sin(time * speed) * amplitude
+			});
+			
+			window.draw(keyboardCursor);
+			window.draw(inputContent);
 		}
 };
 
@@ -118,25 +169,18 @@ class UiKeyboard {
 int main()
 {
 	sf::Clock clock;
+
 	sf::Font GENERAL_FONT;
 	if (!GENERAL_FONT.openFromFile("../assets/fonts/CastoroTitling.ttf"))
 	{
 		std::cout << "Couldn't find font: arial.ttf";
 		return 0;
 	}
-	
-	/*
-	sf::Texture charactertexture;
-	if (!charactertexture.loadFromFile("../assets/textures/cieniowanie.png")){
-		return 0;
-	}
-	*/
 
 	sf::Texture bg_blur;
 	if (!bg_blur.loadFromFile("../assets/textures/bg_blur.png")){
 		return 0;
 	}
-
 
 	sf::Texture char_warrior;
 	if (!char_warrior.loadFromFile("../assets/textures/char_warrior.png")){
@@ -148,15 +192,7 @@ int main()
 		return 0;
 	}
 
-	const int MAP_SIZE = 12;
-
-	UiKeyboard virtualKeyboard;
-	virtualKeyboard.resetCursorPosition();
-	virtualKeyboard.checkCursor();
-
-	sf::Text inputContent(GENERAL_FONT);
-	inputContent.setPosition({TILE_SIZE*8.5,TILE_SIZE*2});
-	
+	UiKeyboard virtualKeyboard("Insert character's name.");
 	sf::RenderWindow mainWindow( sf::VideoMode( { 640, 512 } ), "wyprawaRPG", sf::Style::Titlebar | sf::Style::Close);
 
 	while ( mainWindow.isOpen() )
@@ -168,87 +204,26 @@ int main()
     		if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
     		{
 				sf::Keyboard::Key KeyCode = keyPressed->code; //KEY
-
-
 				virtualKeyboard.checkKeyboardInput(KeyCode);
 
-
-        		if (keyPressed->code == sf::Keyboard::Key::Escape)
-        		{
-            		mainWindow.close();
-        		}
+        		if (keyPressed->code == sf::Keyboard::Key::Escape) mainWindow.close();
     		}
 
 			if ( event->is<sf::Event::Closed>() ) mainWindow.close();
 		}
 
 		mainWindow.clear();
-		
-
-	/*
-	for (int y = 0; y < MAP_SIZE; y++)
-	{
-    	for (int x = 0; x < MAP_SIZE; x++)
-    	{
-        	sf::RectangleShape tile({TILE_SIZE, TILE_SIZE});
-        	tile.setFillColor(sf::Color::Green);
-			if ((x + y) % 2) tile.setFillColor(sf::Color::Red);
-
-        	tile.setPosition({
-            	x * TILE_SIZE,
-            	y * TILE_SIZE
-        	});
-
-        	window.draw(tile);
-    	}
-	}
-	*/
-
-	sf::RectangleShape keyboardCursor({TILE_SIZE, TILE_SIZE});
-	keyboardCursor.setFillColor(sf::Color::Transparent);
-	keyboardCursor.setOutlineColor(sf::Color::Blue);
-	keyboardCursor.setOutlineThickness(3.f);
-
-
+	
 	sf::Sprite bgblur(bg_blur);
 	bgblur.setScale({4.5f,4.5f});
 	bgblur.setPosition({-20.f,100.f});
 
 	mainWindow.draw(bgblur);
+	virtualKeyboard.render(mainWindow, GENERAL_FONT, time);
 
-
-	virtualKeyboard.render(mainWindow, GENERAL_FONT);
-
-	virtualKeyboard.cursor_rx = lerp(virtualKeyboard.cursor_rx,virtualKeyboard.cursor_x,0.5f);
-	virtualKeyboard.cursor_ry = lerp(virtualKeyboard.cursor_ry,virtualKeyboard.cursor_y,0.5f);
-	keyboardCursor.setPosition({virtualKeyboard.cursor_rx * TILE_SIZE ,virtualKeyboard.cursor_ry * TILE_SIZE});
-	mainWindow.draw(keyboardCursor);
-
-	sf::Text infoText(GENERAL_FONT, "Insert Your character name.");
-	infoText.setCharacterSize(24);
-	infoText.setPosition({120.f,0.f});
-	mainWindow.draw(infoText);
-
-	inputContent.setString(virtualKeyboard.content);
-	inputContent.setCharacterSize(40);
-	sf::FloatRect bounds = inputContent.getLocalBounds();
-	inputContent.setOrigin({
-		bounds.position.x + bounds.size.x / 2,
-		bounds.position.y + bounds.size.y / 2
-	});
-	
-	float baseY = 160.f;
-	float amplitude = 5.f;
-	float speed = 2.f;
-	inputContent.setPosition({
-		inputContent.getPosition().x,
-		baseY + std::sin(time * speed) * amplitude
-	});
-	mainWindow.draw(inputContent);
-
-	baseY = 175.f;
-	amplitude = 2.f;
-	speed = 1.5f;	
+	float baseY = 175.f;
+	float amplitude = 2.f;
+	float speed = 1.5f;	
 	sf::Sprite warrior(char_warrior);
 	warrior.setScale({1.5f,1.5f});
 	warrior.setPosition({200.f,baseY + std::sin(time * speed) * amplitude});
