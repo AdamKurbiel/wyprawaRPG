@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
-
+#include <cmath>
 #include "Utils.hpp"
 
 const float TILE_SIZE = 48.f;
@@ -39,8 +39,8 @@ class UiKeyboard {
 			if (keyCode == sf::Keyboard::Key::Up) cursor_y -= 1; 
 			if (keyCode == sf::Keyboard::Key::Down) cursor_y += 1;
 			if (keyCode == sf::Keyboard::Key::Enter || keyCode == sf::Keyboard::Key::Space){
-				if (currentlyHovering == "OK" || content.length() >= 10) return;
-
+				if (currentlyHovering == "OK"){cursor_x = 1; cursor_y = 1; checkCursor(); return;}
+				if (content.length() >= 10){return;}
 				content += currentlyHovering;
 			}
 			if (keyCode == sf::Keyboard::Key::Backspace){
@@ -117,21 +117,36 @@ class UiKeyboard {
 
 int main()
 {
+	sf::Clock clock;
 	sf::Font GENERAL_FONT;
-	if (!GENERAL_FONT.openFromFile("../assets/fonts/arial.ttf"))
+	if (!GENERAL_FONT.openFromFile("../assets/fonts/CastoroTitling.ttf"))
 	{
 		std::cout << "Couldn't find font: arial.ttf";
 		return 0;
 	}
-
+	
+	/*
 	sf::Texture charactertexture;
-
 	if (!charactertexture.loadFromFile("../assets/textures/cieniowanie.png")){
+		return 0;
+	}
+	*/
+
+	sf::Texture bg_blur;
+	if (!bg_blur.loadFromFile("../assets/textures/bg_blur.png")){
 		return 0;
 	}
 
 
+	sf::Texture char_warrior;
+	if (!char_warrior.loadFromFile("../assets/textures/char_warrior.png")){
+		return 0;
+	}
 
+	sf::Texture char_mage;
+	if (!char_mage.loadFromFile("../assets/textures/char_mage.png")){
+		return 0;
+	}
 
 	const int MAP_SIZE = 12;
 
@@ -139,11 +154,15 @@ int main()
 	virtualKeyboard.resetCursorPosition();
 	virtualKeyboard.checkCursor();
 
-
+	sf::Text inputContent(GENERAL_FONT);
+	inputContent.setPosition({TILE_SIZE*8.5,TILE_SIZE*2});
+	
 	sf::RenderWindow mainWindow( sf::VideoMode( { 640, 512 } ), "wyprawaRPG", sf::Style::Titlebar | sf::Style::Close);
 
 	while ( mainWindow.isOpen() )
 	{
+		float time = clock.getElapsedTime().asSeconds();
+
 		while (const auto event = mainWindow.pollEvent())
 		{
     		if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
@@ -190,6 +209,14 @@ int main()
 	keyboardCursor.setOutlineColor(sf::Color::Blue);
 	keyboardCursor.setOutlineThickness(3.f);
 
+
+	sf::Sprite bgblur(bg_blur);
+	bgblur.setScale({4.5f,4.5f});
+	bgblur.setPosition({-20.f,100.f});
+
+	mainWindow.draw(bgblur);
+
+
 	virtualKeyboard.render(mainWindow, GENERAL_FONT);
 
 	virtualKeyboard.cursor_rx = lerp(virtualKeyboard.cursor_rx,virtualKeyboard.cursor_x,0.5f);
@@ -197,31 +224,40 @@ int main()
 	keyboardCursor.setPosition({virtualKeyboard.cursor_rx * TILE_SIZE ,virtualKeyboard.cursor_ry * TILE_SIZE});
 	mainWindow.draw(keyboardCursor);
 
-	sf::Text inputContent(GENERAL_FONT,virtualKeyboard.content);
-	inputContent.setCharacterSize(48);
+	sf::Text infoText(GENERAL_FONT, "Insert Your character name.");
+	infoText.setCharacterSize(24);
+	infoText.setPosition({120.f,0.f});
+	mainWindow.draw(infoText);
+
+	inputContent.setString(virtualKeyboard.content);
+	inputContent.setCharacterSize(40);
 	sf::FloatRect bounds = inputContent.getLocalBounds();
 	inputContent.setOrigin({
 		bounds.position.x + bounds.size.x / 2,
 		bounds.position.y + bounds.size.y / 2
 	});
-	inputContent.setPosition({TILE_SIZE*8.5,TILE_SIZE*2});
+	
+	float baseY = 160.f;
+	float amplitude = 5.f;
+	float speed = 2.f;
+	inputContent.setPosition({
+		inputContent.getPosition().x,
+		baseY + std::sin(time * speed) * amplitude
+	});
 	mainWindow.draw(inputContent);
 
+	baseY = 175.f;
+	amplitude = 2.f;
+	speed = 1.5f;	
+	sf::Sprite warrior(char_warrior);
+	warrior.setScale({1.5f,1.5f});
+	warrior.setPosition({200.f,baseY + std::sin(time * speed) * amplitude});
+	mainWindow.draw(warrior);
 
-
-	sf::Sprite sprite(charactertexture);
-	sprite.setPosition({335.f,150.f});
-	sprite.setScale({0.75f,0.75f});
-	mainWindow.draw(sprite);
-	
-	/*
-	sf::Text debugText(GENERAL_FONT);	
-	debugText.setString("x:"+std::to_string(virtualKeyboard.cursor_rx) + "\ny:" + std::to_string(virtualKeyboard.cursor_ry) + "\ncurrently hovering on: "+ virtualKeyboard.currentlyHovering + "\nContent:"+ virtualKeyboard.content);
-	debugText.setCharacterSize(14);
-	debugText.setFillColor(sf::Color::White);
-	debugText.setStyle(sf::Text::Bold);
-	mainWindow.draw(debugText);
-	*/
+	sf::Sprite mage(char_mage);
+	mage.setScale({1.5f,1.5f});
+	mage.setPosition({390.f,baseY + std::sin(time * speed) * amplitude});
+	mainWindow.draw(mage);
 
 	mainWindow.display();
 	}
