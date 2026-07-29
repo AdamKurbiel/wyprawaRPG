@@ -14,10 +14,10 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(wyprawaRPG
     src/main.cpp
-    src/ResourceManager.cpp
+    src/Systems/ResourceManager.cpp
+    src/UI/UiKeyboard.cpp
 )
 
-target_include_directories(wyprawaRPG PRIVATE include)
 
 target_compile_features(wyprawaRPG PRIVATE cxx_std_17)
 target_link_libraries(wyprawaRPG PRIVATE SFML::Graphics)

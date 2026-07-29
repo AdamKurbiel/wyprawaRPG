@@ -5,12 +5,12 @@ Main file. Currently alot of things are stuck here and I need to find a way to m
 The best approach is to make SceneManager.
 
 */
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
 #include <cmath>
-#include "Utils.hpp"
+#include <SFML/Graphics.hpp>
 #include "ResourceManager.hpp"
+#include "Utils/Utils.hpp"
 
 const float TILE_SIZE = 48.f;
 
