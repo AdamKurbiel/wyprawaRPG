@@ -3,6 +3,7 @@
 #include <string>
 #include <cmath>
 #include "Utils.hpp"
+#include "ResourceManager.hpp"
 
 const float TILE_SIZE = 48.f;
 
@@ -101,10 +102,8 @@ class UiKeyboard {
 			    letter.setPosition({
 			        TILE_SIZE * row + TILE_SIZE / 2.f,
 			        TILE_SIZE * column + TILE_SIZE / 2.f
-			    });
-				
+			    });	
 			    letter.setScale({0.9f, 1.f});
-				
 			    window.draw(letter);
 				
 			    row++;
@@ -141,7 +140,6 @@ class UiKeyboard {
 			infoText.setPosition({320.f, 20.f});
 			window.draw(infoText);
 
-
 			float baseY = 160.f;
 			float amplitude = 5.f;
 			float speed = 2.f;
@@ -165,34 +163,19 @@ class UiKeyboard {
 };
 
 
-
 int main()
 {
+	ResourceManager rm;
 	sf::Clock clock;
 
 	sf::Font GENERAL_FONT;
-	if (!GENERAL_FONT.openFromFile("../assets/fonts/CastoroTitling.ttf"))
-	{
-		std::cout << "Couldn't find font: arial.ttf";
-		return 0;
-	}
-
-	sf::Texture bg_blur;
-	if (!bg_blur.loadFromFile("../assets/textures/bg_blur.png")){
-		return 0;
-	}
-
-	sf::Texture char_warrior;
-	if (!char_warrior.loadFromFile("../assets/textures/char_warrior.png")){
-		return 0;
-	}
-
-	sf::Texture char_mage;
-	if (!char_mage.loadFromFile("../assets/textures/char_mage.png")){
-		return 0;
-	}
-
+	if (!GENERAL_FONT.openFromFile("../assets/fonts/CastoroTitling.ttf")) return 0;
+	
+	sf::Texture bg_blur = rm.loadTexture("../assets/textures/bg_blur.png");
+	sf::Texture char_warrior = rm.loadTexture("../assets/textures/bg_blur.png"); //rm.loadTexture("../assets/textures/char_warrior.png");
+	sf::Texture char_mage = rm.loadTexture("../assets/textures/char_mage.png");
 	UiKeyboard virtualKeyboard("Insert character's name.");
+
 	sf::RenderWindow mainWindow( sf::VideoMode( { 640, 512 } ), "wyprawaRPG", sf::Style::Titlebar | sf::Style::Close);
 
 	while ( mainWindow.isOpen() )
@@ -204,6 +187,7 @@ int main()
     		if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
     		{
 				sf::Keyboard::Key KeyCode = keyPressed->code; //KEY
+
 				virtualKeyboard.checkKeyboardInput(KeyCode);
 
         		if (keyPressed->code == sf::Keyboard::Key::Escape) mainWindow.close();

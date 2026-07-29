@@ -15,6 +15,7 @@ FetchContent_MakeAvailable(SFML)
 add_executable(wyprawaRPG
     src/main.cpp
     src/Utils.hpp
+    src/ResourceManager.cpp
 )
 
 target_compile_features(wyprawaRPG PRIVATE cxx_std_17)
