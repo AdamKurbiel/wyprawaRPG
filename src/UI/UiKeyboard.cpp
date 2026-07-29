@@ -6,7 +6,7 @@ UI element: Keyboard input.
 
 #include "UiKeyboard.hpp"
 #include <cmath>
-#include <Utils/Utils.hpp>
+#include "../Utils/Utils.hpp"
 
 
 UiKeyboard::UiKeyboard(std::string question, float tileSize)
