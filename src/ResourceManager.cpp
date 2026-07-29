@@ -1,3 +1,10 @@
+/*
+<Copyright Adam Kurbiel 2026>
+
+Resource manager. Loads (In the future not only) textures when given path, and adds it to a map.
+Reuses existing textures if map contains requested texture.
+
+*/
 #include "ResourceManager.hpp"
 #include <iostream>
 

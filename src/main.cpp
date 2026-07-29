@@ -1,3 +1,10 @@
+/*
+<Copyright Adam Kurbiel 2026>
+
+Main file. Currently alot of things are stuck here and I need to find a way to move them in some single files.
+The best approach is to make SceneManager.
+
+*/
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
@@ -172,7 +179,7 @@ int main()
 	if (!GENERAL_FONT.openFromFile("../assets/fonts/CastoroTitling.ttf")) return 0;
 	
 	sf::Texture bg_blur = rm.loadTexture("../assets/textures/bg_blur.png");
-	sf::Texture char_warrior = rm.loadTexture("../assets/textures/bg_blur.png"); //rm.loadTexture("../assets/textures/char_warrior.png");
+	sf::Texture char_warrior = rm.loadTexture("../assets/textures/char_warrior.png");
 	sf::Texture char_mage = rm.loadTexture("../assets/textures/char_mage.png");
 	UiKeyboard virtualKeyboard("Insert character's name.");
 
