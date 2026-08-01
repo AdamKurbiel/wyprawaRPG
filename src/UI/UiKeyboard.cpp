@@ -88,11 +88,12 @@ void UiKeyboard::resetCursorPosition()
 }
 
 
-void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float time)
+void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float time, float deltatime)
 {
-    
-    cursor_rx = utils::lerp(cursor_rx, cursor_x, 0.5f);
-    cursor_ry = utils::lerp(cursor_ry, cursor_y, 0.5f);
+    float speed = 3;
+
+    cursor_rx = utils::lerp(cursor_rx, cursor_x, speed * 1000 * deltatime);
+    cursor_ry = utils::lerp(cursor_ry, cursor_y, speed * 1000 * deltatime);
 
 
     sf::RectangleShape keyboardCursor({TILE_SIZE, TILE_SIZE});
@@ -182,16 +183,12 @@ void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float ti
 
     infoText.setPosition({320.f, 20.f});
 
-
     window.draw(infoText);
-
-
 
     sf::Text inputContent(font);
 
     inputContent.setString(content);
     inputContent.setCharacterSize(40);
-
 
     auto inputBounds = inputContent.getLocalBounds();
 
@@ -199,8 +196,6 @@ void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float ti
         inputBounds.position.x + inputBounds.size.x / 2.f,
         inputBounds.position.y + inputBounds.size.y / 2.f
     });
-
-
     inputContent.setPosition({
         TILE_SIZE * 8.5f,
         160.f + std::sin(time * 2.f) * 5.f

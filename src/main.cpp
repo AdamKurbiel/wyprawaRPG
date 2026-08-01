@@ -6,20 +6,28 @@ The best approach is to make SceneManager.
 
 */
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <cmath>
 
 #include <SFML/Graphics.hpp>
-
 #include "Systems/ResourceManager.hpp"
 #include "UI/UiKeyboard.hpp"
 
 const float TILE_SIZE = 48.f;
 
+
+void inputCheck(const sf::Keyboard::Scancode& code)
+{
+	std::string keycode = sf::Keyboard::getDescription(code);
+	std::cout << keycode << '\n';
+}
+
 int main()
 {
 	ResourceManager rm;
 	sf::Clock clock;
+	float dt = clock.restart().asSeconds();
 
 	sf::Font GENERAL_FONT;
 	if (!GENERAL_FONT.openFromFile("../assets/fonts/CastoroTitling.ttf")) return 0;
@@ -37,26 +45,22 @@ int main()
 
 		while (const auto event = mainWindow.pollEvent())
 		{
-    		if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
-    		{
-				sf::Keyboard::Key KeyCode = keyPressed->code; //KEY
-
-				virtualKeyboard.checkKeyboardInput(KeyCode);
-
-        		if (keyPressed->code == sf::Keyboard::Key::Escape) mainWindow.close();
-    		}
+			if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+			{
+				inputCheck(keyPressed->scancode);
+				virtualKeyboard.checkKeyboardInput(keyPressed->code);
+			}
 
 			if ( event->is<sf::Event::Closed>() ) mainWindow.close();
 		}
-
-		mainWindow.clear();
+		mainWindow.clear();	
 	
 	sf::Sprite bgblur(bg_blur);
 	bgblur.setScale({4.5f,4.5f});
 	bgblur.setPosition({-20.f,100.f});
 
 	mainWindow.draw(bgblur);
-	virtualKeyboard.render(mainWindow, GENERAL_FONT, time);
+	virtualKeyboard.render(mainWindow, GENERAL_FONT, time, dt);
 
 	float baseY = 175.f;
 	float amplitude = 2.f;

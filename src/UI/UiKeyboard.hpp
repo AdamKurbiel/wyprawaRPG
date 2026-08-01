@@ -28,5 +28,5 @@ public:
     void checkKeyboardInput(sf::Keyboard::Key keyCode);
     void resetCursorPosition();
 
-    void render(sf::RenderWindow& window, const sf::Font& font, float time);
+    void render(sf::RenderWindow& window, const sf::Font& font, float time, float dt);
 };
