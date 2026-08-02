@@ -5,6 +5,7 @@ UI element: Keyboard input.
 */
 
 #include "UiKeyboard.hpp"
+#include <algorithm>
 #include <cmath>
 #include "../Utils/Utils.hpp"
 
@@ -88,12 +89,13 @@ void UiKeyboard::resetCursorPosition()
 }
 
 
-void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float time, float deltatime)
+void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float time, float deltaTime)
 {
-    float speed = 3;
+    constexpr float speed = 25.f;
+    const float alpha = std::clamp(speed * deltaTime, 0.f, 1.f);
 
-    cursor_rx = utils::lerp(cursor_rx, cursor_x, speed * 1000 * deltatime);
-    cursor_ry = utils::lerp(cursor_ry, cursor_y, speed * 1000 * deltatime);
+    cursor_rx = utils::lerp(cursor_rx, cursor_x, alpha);
+    cursor_ry = utils::lerp(cursor_ry, cursor_y, alpha);
 
 
     sf::RectangleShape keyboardCursor({TILE_SIZE, TILE_SIZE});

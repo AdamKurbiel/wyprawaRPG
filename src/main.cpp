@@ -17,9 +17,10 @@ The best approach is to make SceneManager.
 const float TILE_SIZE = 48.f;
 
 
-void inputCheck(const sf::Keyboard::Scancode& code)
+void inputCheck(const sf::Event::KeyPressed& keyPressed)
 {
-	std::string keycode = sf::Keyboard::getDescription(code);
+	sf::Keyboard::Scancode scancode = keyPressed.scancode;
+	std::string keycode = sf::Keyboard::getDescription(scancode);
 	std::cout << keycode << '\n';
 }
 
@@ -27,11 +28,12 @@ int main()
 {
 	ResourceManager rm;
 	sf::Clock clock;
-	float dt = clock.restart().asSeconds();
+	sf::Clock frameClock;
+	
 
 	sf::Font GENERAL_FONT;
 	if (!GENERAL_FONT.openFromFile("../assets/fonts/CastoroTitling.ttf")) return 0;
-	
+	 
 	sf::Texture bg_blur = rm.loadTexture("../assets/textures/bg_blur.png");
 	sf::Texture char_warrior = rm.loadTexture("../assets/textures/char_warrior.png");
 	sf::Texture char_mage = rm.loadTexture("../assets/textures/char_mage.png");
@@ -42,12 +44,13 @@ int main()
 	while ( mainWindow.isOpen() )
 	{
 		float time = clock.getElapsedTime().asSeconds();
+		float dt = frameClock.restart().asSeconds();
 
 		while (const auto event = mainWindow.pollEvent())
 		{
 			if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 			{
-				inputCheck(keyPressed->scancode);
+				inputCheck(*keyPressed);
 				virtualKeyboard.checkKeyboardInput(keyPressed->code);
 			}
 
