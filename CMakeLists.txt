@@ -14,6 +14,7 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(wyprawaRPG
     src/main.cpp
+    src/game.cpp
     src/Systems/ResourceManager.cpp
     src/UI/UiKeyboard.cpp
 )
