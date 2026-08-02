@@ -11,9 +11,7 @@
 
 class Game
 {
-    private:
-        void inputCheck(UiKeyboard& virtualKeyboard, sf::RenderWindow& window);
-
     public:
+        const float TILE_SIZE = 48.f;
         void run();
 };

@@ -11,11 +11,12 @@ private:
     float TILE_SIZE;
 
 public:
-    std::string content = "";
-
+    bool enabled = true;
+    
     float cursor_x;
     float cursor_y;
 
+    std::string content = "";
     std::string currentlyHovering = "";
     std::string input_question = "";
 
@@ -24,6 +25,7 @@ public:
 
     UiKeyboard(std::string question, float tileSize);
 
+    bool handleEvent(const sf::Event& event);
     void checkCursor();
     void checkKeyboardInput(sf::Keyboard::Key keyCode);
     void resetCursorPosition();

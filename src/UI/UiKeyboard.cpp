@@ -4,14 +4,15 @@
 UI element: Keyboard input.
 */
 
+#include <SFML/Graphics.hpp>
+#include <iostream>
 #include "UiKeyboard.hpp"
 #include <algorithm>
 #include <cmath>
 #include "../Utils/Utils.hpp"
 
 
-UiKeyboard::UiKeyboard(std::string question, float tileSize)
-{
+UiKeyboard::UiKeyboard(std::string question, float tileSize){
     input_question = question;
     TILE_SIZE = tileSize;
 
@@ -19,24 +20,17 @@ UiKeyboard::UiKeyboard(std::string question, float tileSize)
     checkCursor();
 }
 
-
-void UiKeyboard::checkCursor()
-{
+void UiKeyboard::checkCursor(){
     int index = static_cast<int>((cursor_y - 1) * COLUMNS + (cursor_x - 1));
 
-    if (index >= 0 && index < LETTERS.size())
-    {
+    if (index >= 0 && index < LETTERS.size()){
         currentlyHovering = LETTERS[index];
-    }
-    else
-    {
+    }else{
         currentlyHovering = "OK";
-    }
-}
+}}
 
 
-void UiKeyboard::checkKeyboardInput(sf::Keyboard::Key keyCode)
-{
+void UiKeyboard::checkKeyboardInput(sf::Keyboard::Key keyCode){
     if (keyCode == sf::Keyboard::Key::Left) cursor_x -= 1;
     if (keyCode == sf::Keyboard::Key::Right) cursor_x += 1;
     if (keyCode == sf::Keyboard::Key::Up) cursor_y -= 1;
@@ -44,18 +38,16 @@ void UiKeyboard::checkKeyboardInput(sf::Keyboard::Key keyCode)
 
 
     if (keyCode == sf::Keyboard::Key::Enter ||
-        keyCode == sf::Keyboard::Key::Space)
-    {
-        if (currentlyHovering == "OK")
-        {
+        keyCode == sf::Keyboard::Key::Space){
+        if (currentlyHovering == "OK"){
             cursor_x = 1;
             cursor_y = 1;
             checkCursor();
+            enabled = false;
             return;
         }
 
-        if (content.length() >= 10)
-            return;
+        if (content.length() >= 10) return;
 
         content += currentlyHovering;
     }
@@ -78,9 +70,19 @@ void UiKeyboard::checkKeyboardInput(sf::Keyboard::Key keyCode)
     checkCursor();
 }
 
+bool UiKeyboard::handleEvent(const sf::Event& event){
+    if (!event.is<sf::Event::KeyPressed>())
+        return false;
 
-void UiKeyboard::resetCursorPosition()
-{
+    if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()){
+        checkKeyboardInput(keyPressed->code);
+        return true;
+    }
+
+    return false;
+}
+
+void UiKeyboard::resetCursorPosition(){
     cursor_x = 1;
     cursor_y = 1;
 
@@ -89,8 +91,7 @@ void UiKeyboard::resetCursorPosition()
 }
 
 
-void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float time, float deltaTime)
-{
+void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float time, float deltaTime){
     constexpr float speed = 25.f;
     const float alpha = std::clamp(speed * deltaTime, 0.f, 1.f);
 
