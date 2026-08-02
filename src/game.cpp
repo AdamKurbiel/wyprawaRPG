@@ -11,7 +11,7 @@ void Game::inputCheck(const sf::Event::KeyPressed& keyPressed)
 {
 	sf::Keyboard::Scancode scancode = keyPressed.scancode;
 	std::string keycode = sf::Keyboard::getDescription(scancode);
-	std::cout << keycode << '\n';
+	//std::cout << keycode << '\n';
 }
 
 void Game::run(){
@@ -22,8 +22,7 @@ void Game::run(){
 	sf::Clock frameClock;
 	
 
-	sf::Font GENERAL_FONT;
-	if (!GENERAL_FONT.openFromFile("../assets/fonts/CastoroTitling.ttf")) return;
+	sf::Font GENERAL_FONT = rm.loadFont("../assets/fonts/CastoroTitling.ttf");
 	 
 	sf::Texture bg_blur = rm.loadTexture("../assets/textures/bg_blur.png");
 	sf::Texture char_warrior = rm.loadTexture("../assets/textures/char_warrior.png");
