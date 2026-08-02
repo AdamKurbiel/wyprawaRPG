@@ -12,7 +12,7 @@
 class Game
 {
     private:
-        void inputCheck(const sf::Event::KeyPressed& keyPressed);
+        void inputCheck(UiKeyboard& virtualKeyboard, sf::RenderWindow& window);
 
     public:
         void run();
