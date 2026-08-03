@@ -2,10 +2,8 @@
 #include <string>
 #include <cmath>
 #include <SFML/Graphics.hpp>
-
 #include "game.hpp"
 #include "Systems/ResourceManager.hpp"
-#include "UI/UiKeyboard.hpp"
 
 void Game::run(){
     const float TILE_SIZE = 48.f;
@@ -19,8 +17,6 @@ void Game::run(){
 	sf::Texture char_warrior = rm.loadTexture("../assets/textures/char_warrior.png");
 	sf::Texture char_mage = rm.loadTexture("../assets/textures/char_mage.png");
 
-	UiKeyboard vk("Insert character's name.",TILE_SIZE);
-
 	sf::RenderWindow mainWindow( sf::VideoMode( { 640, 512 } ), "wyprawaRPG", sf::Style::Titlebar | sf::Style::Close);
 
 	while (mainWindow.isOpen()){
@@ -28,10 +24,6 @@ void Game::run(){
 			if (event->is<sf::Event::Closed>()){
 				mainWindow.close();
 				break;
-			}
-
-			if (vk.enabled){
-				vk.handleEvent(*event);
 			}
 		}
 
@@ -41,9 +33,9 @@ void Game::run(){
 	    bgblur.setPosition({-20.f,100.f});
 	    mainWindow.draw(bgblur);
 		
+
 		float time = clock.getElapsedTime().asSeconds();
 		float dt = frameClock.restart().asSeconds();
-		if (vk.enabled) vk.render(mainWindow, GENERAL_FONT, time, dt);
 
 	    float baseY = 175.f;
 	    float amplitude = 2.f;

@@ -7,7 +7,6 @@
 
 #include "game.hpp"
 #include "Systems/ResourceManager.hpp"
-#include "UI/UiKeyboard.hpp"
 
 class Game
 {
