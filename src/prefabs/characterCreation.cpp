@@ -58,6 +58,34 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
 		}
 		window.clear();	
 		
+
+		sf::Text character_name(GENERAL_FONT,char_name);
+		character_name.setCharacterSize(48);
+    	auto Bounds = character_name.getLocalBounds();
+    	character_name.setOrigin({
+        	Bounds.position.x + Bounds.size.x / 2.f,
+        	Bounds.position.y + Bounds.size.y / 2.f
+    	});
+    	character_name.setPosition({
+        	window.getSize().x / 2.f,
+			30.f
+		});
+		window.draw(character_name);
+		
+	 
+		sf::Text objective(GENERAL_FONT,"Select your character class.");
+		objective.setCharacterSize(24);
+    	Bounds = objective.getLocalBounds();
+    	objective.setOrigin({
+        	Bounds.position.x + Bounds.size.x / 2.f,
+        	Bounds.position.y + Bounds.size.y / 2.f
+    	});
+    	objective.setPosition({
+        	window.getSize().x / 2.f,
+			70.f
+ 	   });
+	   window.draw(objective);
+		
 		float time = clock.getElapsedTime().asSeconds();
 		float dt = frameClock.restart().asSeconds();
 	    window.display();

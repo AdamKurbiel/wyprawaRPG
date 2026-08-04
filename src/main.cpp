@@ -17,7 +17,6 @@ int main()
 	sf::RenderWindow window( sf::VideoMode( { 640, 512 } ), "wyprawaRPG", sf::Style::Titlebar | sf::Style::Close);
 
 	Character character;
-	
 	Game game;
 
 	character.set_name(rm,window);
