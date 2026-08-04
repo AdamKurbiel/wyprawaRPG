@@ -106,8 +106,8 @@ void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float ti
     keyboardCursor.setOutlineThickness(3.f);
 
     keyboardCursor.setPosition({
-        cursor_rx * TILE_SIZE,
-        cursor_ry * TILE_SIZE
+        roundf(cursor_rx * TILE_SIZE),
+        roundf(cursor_ry * TILE_SIZE)
     });
 
 
