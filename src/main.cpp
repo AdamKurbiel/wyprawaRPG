@@ -16,15 +16,13 @@ int main()
 	ResourceManager rm;
 	sf::RenderWindow window( sf::VideoMode( { 640, 512 } ), "wyprawaRPG", sf::Style::Titlebar | sf::Style::Close);
 
-	CharacterCreation characterCreator;
-	CharacterClass classSelector;
-
+	Character character;
+	
 	Game game;
 
-	std::string character_name = characterCreator.run(rm,window);
-	std::string character_class = classSelector.run(rm,window);
-
-	game.run();
+	character.set_name(rm,window);
+	character.set_class(rm,window);
+	game.run(rm, window);
 
 	return 0;
 };

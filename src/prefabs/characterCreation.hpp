@@ -4,12 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include "../Systems/ResourceManager.hpp"
 
-class CharacterCreation{
+class Character{
     public:
-        std::string run(ResourceManager rm, sf::RenderWindow& window);
-};
+        std::string char_name = "";
+        std::string char_class = "";
 
-class CharacterClass{
-    public:
-        std::string run(ResourceManager rm, sf::RenderWindow& window);
+        void set_name(ResourceManager& rm, sf::RenderWindow& window);
+        void set_class(ResourceManager& rm, sf::RenderWindow& window);
 };

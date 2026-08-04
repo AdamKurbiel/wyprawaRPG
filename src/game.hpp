@@ -12,5 +12,5 @@ class Game
 {
     public:
         const float TILE_SIZE = 48.f;
-        void run();
+        void run(ResourceManager& rm, sf::RenderWindow&);
 };
