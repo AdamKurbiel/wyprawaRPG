@@ -9,7 +9,7 @@ class ResourceManager {
         std::unordered_map<std::string, sf::Texture> textures;
         std::unordered_map<std::string, sf::Font> fonts;
 
-        void logResource(std::string name);
+        void logResource(std::string name, bool existing);
 
     public:
         sf::Texture& loadTexture(const std::string& name);

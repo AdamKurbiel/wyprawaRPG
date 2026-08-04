@@ -8,18 +8,21 @@ Reuses existing textures if map contains requested texture.
 #include "ResourceManager.hpp"
 #include <iostream>
 
-void ResourceManager::logResource(std::string name){
-    //if (existing) std::cout << "[RM] Reloaded " << name << std::endl; return;
+void ResourceManager::logResource(std::string name, bool existing){
+    if (existing){
+        std::cout << "[RM] Reloaded " << name << std::endl;
+        return;
+    }
     std::cout << "[RM] Loaded " << name << std::endl;
 }
 
 
 sf::Texture& ResourceManager::loadTexture(const std::string& name)
 {
-    bool existing = false;
     auto it = textures.find(name);
 
     if (it != textures.end()){
+        logResource(name, true);
         return it->second;
     }
 
@@ -28,7 +31,7 @@ sf::Texture& ResourceManager::loadTexture(const std::string& name)
 
     textures[name] = std::move(texture);
     
-    logResource(name);
+    logResource(name, false);
     return textures[name];
 }
 
@@ -36,6 +39,7 @@ sf::Font& ResourceManager::loadFont(const std::string& name)
 {
     auto it = fonts.find(name);
     if (it != fonts.end()){
+        logResource(name, true);
         return it->second;
     } 
 
@@ -44,6 +48,6 @@ sf::Font& ResourceManager::loadFont(const std::string& name)
 
     fonts[name] = std::move(font);
 
-    logResource(name);
+    logResource(name, false);
     return fonts[name];
 }
