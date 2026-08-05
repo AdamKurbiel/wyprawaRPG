@@ -201,7 +201,7 @@ void UiKeyboard::render(sf::RenderWindow& window, const sf::Font& font, float ti
     });
     inputContent.setPosition({
         TILE_SIZE * 8.5f,
-        160.f + std::sin(time * 2.f) * 5.f
+        120.f + std::sin(time * 2.f) * 5.f
     });
 
 

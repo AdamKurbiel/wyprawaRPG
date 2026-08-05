@@ -12,6 +12,18 @@ void Character::set_name(ResourceManager& rm, sf::RenderWindow& window){
 	sf::Clock frameClock;
 	
 	sf::Font GENERAL_FONT = rm.loadFont("../assets/fonts/CastoroTitling.ttf");
+	sf::Texture class_textures[4] = {
+		rm.loadTexture("../assets/textures/knight.png"),
+		rm.loadTexture("../assets/textures/knight.png"),
+		rm.loadTexture("../assets/textures/knight.png"),
+		rm.loadTexture("../assets/textures/knight.png")
+	};
+	
+	sf::Sprite chosenClassSprite(class_textures[chosen_class_index]);
+	chosenClassSprite.setScale({0.5f,0.5f});
+	chosenClassSprite.setPosition({30.f,30.f});
+
+
 
 	UiKeyboard vk("Insert character's name.",TILE_SIZE);
 
@@ -26,7 +38,20 @@ void Character::set_name(ResourceManager& rm, sf::RenderWindow& window){
 			}
 		}
 		window.clear();	
-		
+
+		window.draw(chosenClassSprite);
+
+		sf::Text chosenClassName(GENERAL_FONT,"Class: " +char_class);
+		chosenClassName.setCharacterSize(20);
+		auto chosenClassName_bounds = chosenClassName.getLocalBounds();
+		chosenClassName.setOrigin({
+			chosenClassName_bounds.position.x + chosenClassName_bounds.size.x / 2.f,
+			chosenClassName_bounds.position.y + chosenClassName_bounds.size.y / 1.f
+		});
+
+		chosenClassName.setPosition({410.f,175.f});
+		window.draw(chosenClassName);
+	
 		float time = clock.getElapsedTime().asSeconds();
 		float dt = frameClock.restart().asSeconds();
 		if (vk.enabled) vk.render(window, GENERAL_FONT, time, dt);
@@ -96,6 +121,9 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
 			
 			window.draw(class_sprite);
 		}
+		chosen_class_index = cs.selected;
+		char_class = cs.content;
+
 
 		sf::Text objective(GENERAL_FONT,"Select your character class.");
 		objective.setCharacterSize(24);
@@ -127,6 +155,4 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
 
 		window.display();
 	}
-
-	char_class = "";
 }

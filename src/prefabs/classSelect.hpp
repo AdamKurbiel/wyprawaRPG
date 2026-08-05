@@ -15,11 +15,10 @@ private:
 public:
     bool enabled = true;
     
+    std::string selected_str = "";
     int selected = 0;
 
     std::string content = classes[selected];
-    std::string input_question = "";
-
     float cursor_rx;
 
     bool handleEvent(const sf::Event& event);

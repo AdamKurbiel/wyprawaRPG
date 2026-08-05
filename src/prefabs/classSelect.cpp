@@ -70,7 +70,6 @@ void ClassSelect::render(sf::RenderWindow& window, const sf::Font& font, float t
     classNameText.setPosition({320.f, 64.f});
     window.draw(keyboardCursor);
     window.draw(classNameText);
-    
 
     sf::Text classDescriptionText(font);
     classDescriptionText.setString(class_desc[selected]);
