@@ -44,16 +44,16 @@ void ClassSelect::render(sf::RenderWindow& window, const sf::Font& font, float t
     constexpr float speed = 25.f;
     const float alpha = std::clamp(speed * deltaTime, 0.f, 1.f);
 
-    cursor_rx = utils::lerp(cursor_rx, selected * 128.f + 42.f, alpha);
+    cursor_rx = utils::lerp(cursor_rx, selected * 156.f, alpha);
 
-    sf::RectangleShape keyboardCursor({128.f,312.f});
+    sf::RectangleShape keyboardCursor({128.f,380.f});
 
     keyboardCursor.setFillColor(sf::Color::Transparent);
-    keyboardCursor.setOutlineColor(sf::Color::Blue);
+    keyboardCursor.setOutlineColor(sf::Color{ 255, 255, 255, 100 });
     keyboardCursor.setOutlineThickness(3.f);
 
     keyboardCursor.setPosition({
-        roundf(cursor_rx * 1.f) + 16.f,
+        roundf(cursor_rx * 1.f) + 26.f,
         96.f
     });
 
@@ -68,8 +68,9 @@ void ClassSelect::render(sf::RenderWindow& window, const sf::Font& font, float t
         classNameTextBounds.position.y + classNameTextBounds.size.y / 2.f
     });
     classNameText.setPosition({320.f, 64.f});
+    window.draw(keyboardCursor);
     window.draw(classNameText);
-
+    
 
     sf::Text classDescriptionText(font);
     classDescriptionText.setString(class_desc[selected]);
@@ -87,5 +88,5 @@ void ClassSelect::render(sf::RenderWindow& window, const sf::Font& font, float t
 
 
 
-    window.draw(keyboardCursor);
+    
 }

@@ -79,10 +79,12 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
 		window.clear();
 
 		for (int i = 0; i < 4; i++){
+			float offset_y = 0.f;
+			if (cs.selected == i) offset_y = 10.f;
 			sf::Texture& txt = class_textures[i];
 			sf::Sprite class_sprite(txt);
-			class_sprite.setScale({0.15f,0.15f});
-			class_sprite.setPosition({10.f + (128.f * i)  ,55.f});
+			class_sprite.setScale({0.20f,0.20f});
+			class_sprite.setPosition({(156.f * i) - 64.f  ,55.f - offset_y});
 			
 			window.draw(class_sprite);
 		}
