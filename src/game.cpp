@@ -12,19 +12,26 @@ Main game script. It is responsible for handling maps, game events etc.
 #include "game.hpp"
 #include "Systems/ResourceManager.hpp"
 #include "Prefabs/characterCreation.hpp"
+#include "Systems/GameMap.hpp"
 
-void Game::run(ResourceManager& rm, sf::RenderWindow& window, Character character{
+void Game::run(ResourceManager& rm, sf::RenderWindow& window, Character character){
     const float TILE_SIZE = 48.f;
 	sf::Clock clock;
 	sf::Clock frameClock;
 	
 	sf::Font GENERAL_FONT = rm.loadFont("../assets/fonts/CastoroTitling.ttf");
 
+	GameMap gameMap(TILE_SIZE);
+
+	gameMap.printContent();
+
 	while (window.isOpen()){
 		while (const auto event = window.pollEvent()){
 			if (event->is<sf::Event::Closed>())std::exit(0);
 		}
 		window.clear();
+
+		gameMap.render(window);
 
 	    window.display();
 	}
