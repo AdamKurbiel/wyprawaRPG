@@ -3,6 +3,7 @@
 #include "../UI/UiKeyboard.hpp"
 #include "../Systems/ResourceManager.hpp"
 #include "classSelect.hpp"
+#include "../Utils/Utils.hpp"
 
 void Character::set_name(ResourceManager& rm, sf::RenderWindow& window){
     const float TILE_SIZE = 48.f;
@@ -63,8 +64,11 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
 		rm.loadTexture("../assets/textures/knight.png")
 	};
 
+	std::array<float, 4> class_y = {55.f, 55.f, 55.f, 55.f};
 
 	while (cs.enabled && window.isOpen()){
+		float time = clock.getElapsedTime().asSeconds();
+		float dt = frameClock.restart().asSeconds();
 		while (const auto event = window.pollEvent()){
 			if (event->is<sf::Event::Closed>()){
 				std::exit(0);
@@ -79,12 +83,16 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
 		window.clear();
 
 		for (int i = 0; i < 4; i++){
-			float offset_y = 0.f;
-			if (cs.selected == i) offset_y = 10.f;
+			float target_y = 55.f;
+			if (cs.selected == i) target_y = 30.f;
+			constexpr float speed = 10.f;
+			const float alpha = std::clamp(speed * dt, 0.f, 1.f);
+    		class_y[i] = utils::lerp(class_y[i], target_y, alpha);
+
 			sf::Texture& txt = class_textures[i];
 			sf::Sprite class_sprite(txt);
 			class_sprite.setScale({0.20f,0.20f});
-			class_sprite.setPosition({(156.f * i) - 64.f  ,55.f - offset_y});
+			class_sprite.setPosition({(156.f * i) - 64.f, class_y[i]});
 			
 			window.draw(class_sprite);
 		}
@@ -115,8 +123,6 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
 		});
 		window.draw(tooltip);
 	
-		float time = clock.getElapsedTime().asSeconds();
-		float dt = frameClock.restart().asSeconds();
 		if (cs.enabled) cs.render(window, GENERAL_FONT, time, dt);
 
 		window.display();

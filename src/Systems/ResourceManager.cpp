@@ -28,6 +28,7 @@ sf::Texture& ResourceManager::loadTexture(const std::string& name)
 
     sf::Texture texture;
     if (!texture.loadFromFile(name)) throw std::runtime_error("Couldn't load texture: " + name);
+    texture.setSmooth(true);
 
     textures[name] = std::move(texture);
     
