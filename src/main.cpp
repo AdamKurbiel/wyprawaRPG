@@ -6,7 +6,7 @@ handle all updates, renders and checks.
 
 */
 #include <SFML/Graphics.hpp>
-#include "prefabs/characterCreation.hpp"
+#include "Prefabs/characterCreation.hpp"
 #include "Systems/ResourceManager.hpp"
 #include "game.hpp"
 

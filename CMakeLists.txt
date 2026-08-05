@@ -17,8 +17,8 @@ add_executable(wyprawaRPG
     src/game.cpp
     src/Systems/ResourceManager.cpp
     src/UI/UiKeyboard.cpp
-    src/prefabs/characterCreation.cpp
-    src/prefabs/classSelect.cpp
+    src/Prefabs/characterCreation.cpp
+    src/Prefabs/classSelect.cpp
 )
 
 
