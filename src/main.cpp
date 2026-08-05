@@ -19,8 +19,8 @@ int main()
 	Character character;
 	Game game;
 
-	character.set_name(rm,window);
 	character.set_class(rm,window);
+	character.set_name(rm,window);
 	game.run(rm, window);
 
 	return 0;

@@ -2,6 +2,7 @@
 #include "characterCreation.hpp"
 #include "../UI/UiKeyboard.hpp"
 #include "../Systems/ResourceManager.hpp"
+#include "classSelect.hpp"
 
 void Character::set_name(ResourceManager& rm, sf::RenderWindow& window){
     const float TILE_SIZE = 48.f;
@@ -54,33 +55,37 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
 	sf::Clock frameClock;
 	
 	sf::Font GENERAL_FONT = rm.loadFont("../assets/fonts/CastoroTitling.ttf");
-	sf::Text character_name(GENERAL_FONT,char_name);	
+	ClassSelect cs;
+	sf::Texture class_textures[4] = {
+		rm.loadTexture("../assets/textures/knight.png"),
+		rm.loadTexture("../assets/textures/knight.png"),
+		rm.loadTexture("../assets/textures/knight.png"),
+		rm.loadTexture("../assets/textures/knight.png")
+	};
 
-	while (true && window.isOpen()){
+
+	while (cs.enabled && window.isOpen()){
 		while (const auto event = window.pollEvent()){
 			if (event->is<sf::Event::Closed>()){
 				std::exit(0);
 			}
 
-			/*
-			if (vk.enabled){
-				vk.handleEvent(*event);
+			
+			if (cs.enabled){
+				cs.handleEvent(*event);
 			}
-			*/
+			
 		}
 		window.clear();
 
-		character_name.setCharacterSize(48);
-    	auto character_name_bounds = character_name.getLocalBounds();
-    	character_name.setOrigin({
-        	character_name_bounds.position.x + character_name_bounds.size.x / 2.f,
-        	character_name_bounds.position.y + character_name_bounds.size.y / 2.f
-    	});
-    	character_name.setPosition({
-        	window.getSize().x / 2.f,
-			30.f
-		});
-		window.draw(character_name);
+		for (int i = 0; i < 4; i++){
+			sf::Texture& txt = class_textures[i];
+			sf::Sprite class_sprite(txt);
+			class_sprite.setScale({0.15f,0.15f});
+			class_sprite.setPosition({10.f + (128.f * i)  ,55.f});
+			
+			window.draw(class_sprite);
+		}
 
 		sf::Text objective(GENERAL_FONT,"Select your character class.");
 		objective.setCharacterSize(24);
@@ -91,7 +96,7 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
     	});
     	objective.setPosition({
         	window.getSize().x / 2.f,
-			70.f
+			20.f
  	   });
 	   window.draw(objective);
 
@@ -107,7 +112,11 @@ void Character::set_class(ResourceManager& rm, sf::RenderWindow& window){
 			window.getSize().y /1.f - 5.f
 		});
 		window.draw(tooltip);
-	   
+	
+		float time = clock.getElapsedTime().asSeconds();
+		float dt = frameClock.restart().asSeconds();
+		if (cs.enabled) cs.render(window, GENERAL_FONT, time, dt);
+
 		window.display();
 	}
 
