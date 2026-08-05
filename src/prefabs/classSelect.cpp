@@ -59,7 +59,7 @@ void ClassSelect::render(sf::RenderWindow& window, const sf::Font& font, float t
 
     sf::Text classNameText(font);
     classNameText.setString(content);
-    classNameText.setCharacterSize(32);
+    classNameText.setCharacterSize(48);
 
     auto classNameTextBounds = classNameText.getLocalBounds();
 
