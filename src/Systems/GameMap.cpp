@@ -8,7 +8,7 @@ GameMap::GameMap(float tile_size){
     TILESIZE = tile_size;   
 }
 
-void GameMap::renderTile(sf::RenderWindow& window, int x, int y, int txt_id){
+void GameMap::renderTile(sf::RenderWindow& window, int x, int y, uint16_t txt_id){
     /*TODO replace tile colors with actual textures
     (currently using tile colors as placeholders).*/
     sf::RectangleShape tile({TILESIZE,TILESIZE});

@@ -7,15 +7,15 @@
 
 class GameMap{
     private:
-        std::map<int, sf::Color> colormap = {
+        std::map<uint16_t, sf::Color> colormap = {
             {0, sf::Color::Green},
             {1, sf::Color::Magenta}
         };
-        void renderTile(sf::RenderWindow& window, int x, int y, int txt_id);
+        void renderTile(sf::RenderWindow& window, int x, int y, uint16_t txt_id);
     public:
         float TILESIZE = 48.f;
         int MAP_WIDTH = 10;
-        std::vector<int> content = {
+        std::vector<uint16_t> content = {
             0,0,0,0,0,0,0,0,0,1,
             0,0,0,0,1,1,1,1,0,1,
             0,0,0,0,1,0,0,1,0,1,
