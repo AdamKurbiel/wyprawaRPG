@@ -7,6 +7,7 @@
 
 class GameMap{
     private:
+    //todo change it to tileset
         std::map<uint16_t, sf::Color> colormap = {
             {0, sf::Color::Green},
             {1, sf::Color::Magenta}

@@ -1,3 +1,10 @@
+/*
+<Copyright Adam Kurbiel 2026>
+
+GameMap is main class for world map in the game. it renders specified tiles
+and (in the future) will set texture from tileset to it.
+*/
+
 #include "GameMap.hpp"
 #include <iostream>
 #include <vector>
