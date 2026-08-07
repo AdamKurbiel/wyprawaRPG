@@ -40,6 +40,8 @@ void UiKeyboard::checkKeyboardInput(sf::Keyboard::Key keyCode){
     if (keyCode == sf::Keyboard::Key::Enter ||
         keyCode == sf::Keyboard::Key::Space){
         if (currentlyHovering == "OK"){
+            if (content.length() < 1) return; 
+
             cursor_x = 1;
             cursor_y = 1;
             checkCursor();
