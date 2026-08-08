@@ -1,7 +1,7 @@
 /*
 <Copyright Adam Kurbiel 2026>
 
-UI element: Keyboard input.
+Class selection. Player can select one of four classes.
 */
 
 #include <SFML/Graphics.hpp>

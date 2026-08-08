@@ -1,3 +1,10 @@
+/*
+<Copyright Adam Kurbiel 2026>
+
+Character creation script. contains classes that render and handle character
+creation UI.
+
+*/
 #include <SFML/Graphics.hpp>
 #include "characterCreation.hpp"
 #include "../UI/UiKeyboard.hpp"
