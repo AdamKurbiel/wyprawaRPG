@@ -7,6 +7,6 @@ in future seed is stored and loaded in the save file.
 */
 #pragma once
 
-class rng{
+class Rng{
 
 };
