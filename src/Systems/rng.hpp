@@ -7,6 +7,13 @@ in future seed is stored and loaded in the save file.
 */
 #pragma once
 
-class Rng{
+#include <random>
+#include <iostream>
 
+class Rng
+{
+    private:
+        unsigned seed;
+    public:
+        Rng();
 };
