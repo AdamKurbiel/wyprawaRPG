@@ -9,3 +9,10 @@ Rng::Rng(){
     
     std::cout << "Control gen: " << dist(generating) << std::endl;
 }
+
+int Rng::rng_int(int min, int max){
+    std::mt19937 generating(seed);
+    std::uniform_int_distribution<int> dist(min,max);
+
+    return dist(generating);
+}

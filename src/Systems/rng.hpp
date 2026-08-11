@@ -16,4 +16,5 @@ class Rng
         unsigned seed;
     public:
         Rng();
+        int rng_int(int min, int max);
 };
