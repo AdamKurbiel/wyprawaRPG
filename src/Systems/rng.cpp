@@ -10,7 +10,8 @@ Rng::Rng(){
     std::cout << "Control gen: " << dist(generating) << std::endl;
 }
 
-int Rng::rng_int(int min, int max){
+template <typename T>
+T Rng::rng_range(T min, T max){
     std::mt19937 generating(seed);
     std::uniform_int_distribution<int> dist(min,max);
 

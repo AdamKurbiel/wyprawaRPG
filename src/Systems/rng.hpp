@@ -16,5 +16,7 @@ class Rng
         unsigned seed;
     public:
         Rng();
-        int rng_int(int min, int max);
+        
+        template <typename T>
+        T rng_range(T min, T max);
 };
