@@ -13,8 +13,9 @@ Main game script. It is responsible for handling maps, game events etc.
 #include "Systems/ResourceManager.hpp"
 #include "Prefabs/characterCreation.hpp"
 #include "Systems/GameMap.hpp"
+#include "Systems/rng.hpp"
 
-void Game::run(ResourceManager& rm, sf::RenderWindow& window, Character character){
+void Game::run(ResourceManager& rm, sf::RenderWindow& window, Character character, Rng rng){
     const float TILE_SIZE = 48.f;
 	sf::Clock clock;
 	sf::Clock frameClock;

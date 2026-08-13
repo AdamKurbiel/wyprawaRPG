@@ -24,7 +24,7 @@ int main()
 
 	character.set_class(rm,window);
 	character.set_name(rm,window);
-	game.run(rm, window, character);
+	game.run(rm, window, character, rng);
 
 	return 0;
 };
