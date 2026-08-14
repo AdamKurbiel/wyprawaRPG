@@ -21,6 +21,7 @@ int main()
 	Character character;
 	Game game;
 
+	std::cout << "Seed: " << rng.seed << std::endl;
     std::cout << "Control gen: " << rng.range(1,10) << std::endl;
 
 	character.set_class(rm,window);

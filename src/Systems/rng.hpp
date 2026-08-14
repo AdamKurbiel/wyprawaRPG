@@ -12,9 +12,8 @@ in future seed is stored and loaded in the save file.
 
 class Rng
 {
-    private:
-        unsigned seed;
     public:
+        unsigned seed;
         Rng();
         
         template <typename T>
