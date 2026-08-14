@@ -18,5 +18,9 @@ class Rng
         Rng();
         
         template <typename T>
-        T range(T min, T max);
+        T range(T min, T max) {
+            std::mt19937 generating(seed);
+            std::uniform_int_distribution<T> dist(min, max);
+            return dist(generating);
+        }
 };
