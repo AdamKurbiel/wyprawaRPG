@@ -21,6 +21,7 @@ int main()
 	Character character;
 	Game game;
 
+    std::cout << "Control gen: " << rng.range(1,10) << std::endl;
 
 	character.set_class(rm,window);
 	character.set_name(rm,window);
