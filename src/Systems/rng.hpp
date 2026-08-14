@@ -18,5 +18,5 @@ class Rng
         Rng();
         
         template <typename T>
-        T rng_range(T min, T max);
+        T range(T min, T max);
 };
